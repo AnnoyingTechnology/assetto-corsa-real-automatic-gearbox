@@ -111,9 +111,9 @@ def toggleDriveMode(*args):
 # 2 index is : how quickly the aggressiveness lowers when driving calmly (1/value)
 # 3 index is : the bare minimum aggressiveness to keep at any given time
 gas_thresholds =    [[0, 0, 0, 0],#manual
-                    [0.95, 0.4, 12, 0],# auto: normal
+                    [0.95, 0.4, 12, 0.15],# auto: normal
                     [0.8, 0.4, 24, 0.5],# auto: sport
-                    [1, 0.5, 4, 0]]# auto: eco
+                    [1, 0.5, 6, 0]]# auto: eco
 
 
 def analyzeInput(deltaT):
@@ -123,18 +123,18 @@ def analyzeInput(deltaT):
     # and apply a factor from the current driving mode
     new_aggr = min(
         1, 
-        (
+        max((
             gas - gas_thresholds[drive_mode][1]
         ) / 
         (
            gas_thresholds[drive_mode][0] - gas_thresholds[drive_mode][1]
         ),
         (
-            brake - gas_thresholds[drive_mode][1]
+            brake - (gas_thresholds[drive_mode][1] - 0.3)
         ) / 
         (
            gas_thresholds[drive_mode][0] - gas_thresholds[drive_mode][1]
-        )
+        )*1.6)
     )
     # new_aggr = min(1, (gas - gas_thresholds[drive_mode][1]) / (gas_thresholds[drive_mode][0] - gas_thresholds[drive_mode][1]))
     # ex full accel: 1, (1 - 0.95) / (0.95 - 0.4)
