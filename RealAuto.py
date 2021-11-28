@@ -31,6 +31,8 @@ from sim_info import info
 maxRPM = 0
 gear = 0
 gas = 0
+brake = 0
+steerAngle = 0
 rpm = 0
 speed = 0
 slipping = False
@@ -55,11 +57,13 @@ aggressiveness = 0
 aggr_lbl = 0
 last_inc_aggr_time = 0
 
-#driving mode stuff
+# the default driving mode is : Manual (no automatic shifting)
 drive_mode = 0
 
 mode_button = 0
 
+# initialize the App's GUI controls 
+# (allowing to change driving modes)
 def acMain(ac_version):
     global aggr_lbl, mode_button
     app_window = ac.newApp("Realistic Auto")
@@ -81,14 +85,16 @@ def acMain(ac_version):
     initializeInfo()
     return
 
-
+# infinite loop to update the decision algorithm
+# and actually decide if we need to take any action right now
 def acUpdate(deltaT):
     getInfo()
+    # only run the algorithm if we are not in manual mode (don't waste CPU cycles)
     if drive_mode > 0:
         analyzeInput(deltaT)
         makeDecision()
 
-
+# define the available driving modes
 modes = ["Manual", "Auto: Normal", "Auto: Sport", "Auto: Eco"]
 
 
@@ -98,10 +104,12 @@ def toggleDriveMode(*args):
     drive_mode = drive_mode%4
     ac.setText(mode_button, modes[drive_mode])
 
-# 0 index is : used for agressiveness
-# 1 index is : used for agressiveness
-# 2 index is : 
-# 3 index is : 
+
+# define the settings for different driving modes
+# 0 index is : used in agressiveness increase decision
+# 1 index is : used in agressiveness increase decision
+# 2 index is : how quickly the aggressiveness lowers when driving calmly (1/value)
+# 3 index is : the bare minimum aggressiveness to keep at any given time
 gas_thresholds =    [[0, 0, 0, 0],#manual
                     [0.95, 0.4, 12, 0],# auto: normal
                     [0.8, 0.4, 24, 0.5],# auto: sport
@@ -111,6 +119,8 @@ gas_thresholds =    [[0, 0, 0, 0],#manual
 def analyzeInput(deltaT):
     # add brake force, and consider brake force exactly as gas input
     global aggressiveness, aggr_lbl, rpmRangeTop, rpmRangeBottom, last_inc_aggr_time
+    # compute a new aggressiveness level depending on the gas and brake pedal pressure
+    # and apply a factor from the current driving mode
     new_aggr = min(
         1, 
         (
@@ -142,16 +152,43 @@ def analyzeInput(deltaT):
         # we lower the aggressiveness by a factor given by the current driving move
         aggressiveness -= (deltaT / gas_thresholds[drive_mode][2])
 
-    # we cap the aggressiveness to the maximum aggressiveness
-    # allowed by the current driving mode (we cannot exceed it) 
-    aggressiveness = max(aggressiveness, gas_thresholds[drive_mode][3])
+    # we maintain a minimum aggressiveness defined by the current driving mode
+    # it's only used by the sport mode, to maintain the aggressiveness always above 0.5
+    # all other driving modes will use the actual computed aggressiveness 
+    # (which can be bellow 0.5)
+    aggressiveness = max(
+        aggressiveness, 
+        gas_thresholds[drive_mode][3]
+    )
 
-    rpmRangeTop = idleRPM + 1000 + ((maxShiftRPM - idleRPM - 1000)*aggressiveness)
-    rpmRangeBottom = max(idleRPM + (min(gear, 6) * 80), rpmRangeTop - rpmRangeSize)
+    # adjust the allowed upshifting rpm range, 
+    # depending on the aggressiveness
+    rpmRangeTop = (
+        idleRPM + 1000 + 
+        (
+            (maxShiftRPM - idleRPM - 1000)
+            *aggressiveness
+        )
+    )
+    # adjust the allowed downshifting rpm range, 
+    # depending on the aggressiveness
+    rpmRangeBottom = max(
+        idleRPM + (min(gear, 6) * 80), 
+        rpmRangeTop - rpmRangeSize
+    )
 
-    ac.setText(aggr_lbl, "Aggressiveness: " + str(round(aggressiveness, 2)) + "\nRpm Top: " + str(round(rpmRangeTop)) + "\nRpm Bottom: " + str(round(rpmRangeBottom)))
+    # update the App's displayed text with : 
+    # current rpm ranges, and current aggressiveness
+    ac.setText(
+        aggr_lbl, 
+        "Aggressiveness: " + 
+        str(round(aggressiveness, 2)) + 
+        "\nRpm Top: " + 
+        str(round(rpmRangeTop)) + 
+        "\nRpm Bottom: " + 
+        str(round(rpmRangeBottom)))
     
-
+# this is where we decide if we want to shift
 def makeDecision():
     if (
         # we have already shifted in the last 0.1s
