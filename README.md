@@ -11,5 +11,6 @@ The original work can be found at https://www.racedepartment.com/downloads/more-
 * Require a full kickdown (0.95+ gas pedal) to provoke a downshift in eco-mode. Allowing to comfortably ride the torque of the current gear. Most cars with a decent size engine will be happy to let you ride the torque before rather that downshifting. A sensor at the end of the gas pedal travel signals the ECU to drop one or multiple gears.
 * Consider the brake pedal exactly like the gas pedal variable is considered to update aggressiveness. As an aggressive braking suggests an aggressive driving too.
 * Consider lateral G-meter to prevent the dropping of aggressiveness while cornering (and prevent upshifts). Maintaining the aggressiveness steady between the moment one enters the corner and the moment one exits it.
+* Avoid excessive throttle blips on downshifts (attempt a proper rev match instead)
 
 **None of the goals are currently achieved**
