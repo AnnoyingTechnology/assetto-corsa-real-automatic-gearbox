@@ -15,6 +15,6 @@ The original work can be found at https://www.racedepartment.com/downloads/more-
 * [ ] Consider the speed at which the gas pedal is actuated as an factor of aggressiveness. Since pressing the gas all the way **slowly** means that we want full torque, not necessarily a downshift. 
 * [ ] Prevent downshifts to 1st gear except bellow 10 km/h or when agressiveness is above 0.95
 * [ ] Splits the driving modes into distinct algorithms, rather than just altering a few variables (since there is lots of tweaking needed between the differents driving modes)
-* [ ] Under braking, force the dropping of gears above 4 (5,6,7,8), since those are overdrive gears that don't offer the torque needed to get out of a corner. We could arbitrarily move the rpmDown range for those gears under breaking or slow down conditions. 
-* [ ] Don't upshift if zero throttle is applied (it can currently happen if aggressiveness drops while the vehicule is slowing down)
+* [ ] When the brake is applied in any amount, immediately force the dropping of gears above 4 (5,6,7,8), since those are overdrive gears that don't offer the torque needed to get out of a corner. We could also arbitrarily move the rpmDown range for those gears under breaking or slow down conditions. 
+* [ ] Prevent upshifts if zero throttle is applied or if brake is applied in any amount (it can currently happen if aggressiveness drops while the vehicule is slowing down)
  
