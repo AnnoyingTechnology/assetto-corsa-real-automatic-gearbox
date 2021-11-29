@@ -36,6 +36,7 @@ steerAngle = 0
 rpm = 0
 speed = 0
 slipping = False
+waitTimeBetweenDownShifts = 2
 
 initialized = False
 measureIdleTime = 99999999999999
@@ -190,6 +191,12 @@ def analyzeInput(deltaT):
     
 # this is where we decide if we want to shift
 def makeDecision():
+    # when braking we allow quick followup of downshift, but not when accelerating
+    if (brake > 0):
+        waitTimeBetweenDownShifts = 1
+    elif(brake == 0):
+        waitTimeBetweenDownShifts = 2
+
     if (
         # we have already shifted in the last 0.1s
         time.time() < lastShiftTime + 0.1 or 
@@ -198,7 +205,7 @@ def makeDecision():
         # or we have already shifted up in the last 1 sec
         time.time() < lastShiftUpTime + 1 or 
         # or we have already shifted down in the last 2 sec
-        time.time() < lastShiftDownTime + 2
+        time.time() < lastShiftDownTime + waitTimeBetweenDownShifts 
     ):
         # do not change gear
         return
@@ -208,7 +215,11 @@ def makeDecision():
         # we don't have wheel spin
         not slipping and 
         # we have not downshifted in the last 1 sec (to prevent up-down-up-down-up-down)
-        time.time() > lastShiftDownTime + 1
+        time.time() > lastShiftDownTime + 1 and 
+        # we are not on the brakes 
+        brake == 0 and 
+        # we are not coasting either
+        gas > 0
     ):
         # actually UPSHIFT
         shiftUp()
@@ -220,7 +231,28 @@ def makeDecision():
         # we are not in first gear (meaning we have gears available bellow us)
         gear > 1 and 
         # we have not downshifted in the last 2 sec
-        time.time() > lastShiftDownTime + 2
+        time.time() > lastShiftDownTime + waitTimeBetweenDownShifts and
+        # depending on which gears we'll end up into
+        (
+            # we are NOT about to downshift into 1st, we can allow it 
+            gear > 2 or 
+            (
+                # we are about to downshift into 1st
+                gear == 2 and 
+                (
+                    # we must be very vert aggressive to allow that to happen
+                    aggressiveness >= 0.95 or
+                    # be very very slow (less than 15km.h, which is always ok)
+                    speed <= 15
+                )
+            ) or
+            ( 
+                # we are in an overdrive gear
+                gear >= 4 and 
+                # we are braking
+                brake > 0
+            )
+        )
     ):
         # actually DOWNSHIFT
         shiftDown()
