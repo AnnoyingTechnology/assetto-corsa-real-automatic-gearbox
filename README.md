@@ -6,7 +6,7 @@ This app is a fork of someone else's work with many improvements.
 
 ## Installation instructions
 
-* Get the release ZIP on this Github repostiory
+* [Get the release ZIP](https://github.com/AnnoyingTechnology/assetto-corsa-real-automatic-gearbox/releases/download/v0.3/RealAutoGearboxEnhanced.zip) on this Github repostiory
 * Drop the ZIP into Content Manager
 * In Content Manager, navigate to Settings > Assetto Corsa > Apps > `Enable Python apps` [X] this must be enabled
 * In Content Manager, navigate to Settings > Assetto Corsa > Controls > Buttons
