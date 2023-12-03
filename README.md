@@ -2,9 +2,21 @@
 A Real Automatic Gearbox App for Assetto Corsa
 
 
-This app is a fork of someone else's work. 
+This app is a fork of someone else's work with many improvements. 
 
-The original work can be found at https://www.racedepartment.com/downloads/more-realistic-automatic-gearbox.33698/
+## Installation instructions
+
+* Get the release ZIP on this Github repostiory
+* Drop the ZIP into Content Manager
+* In Content Manager, navigate to Settings > Assetto Corsa > Apps > `Enable Python apps` [X] this must be enabled
+* In Content Manager, navigate to Settings > Assetto Corsa > Controls > Buttons
+  * `Combine with keyboard` [X] must be enabled
+  * `Next gear` must be defined to `P`
+  * `Previous gear` must be defined to `O`
+* In you first Drive, go to the righ of the screen, a long menu should appear on the right side, [X] Realistic Auto must be enabled
+* The app should display on your screen, click on "Manual" so that it changes to Auto.
+* **Shift into 1st, you are ready to drive**
+
 
 ## Goals of the fork  
 * [x] Prevent double-downshifts by adding a requirement of 2.5sec between downshifts. This would give time for the engine to ramp up and offer a nicer experience. Ideally, we'd want to accept double downshifts but skip directly to the -2 or -3 gear to avoid the harshness of multiple throttle blips (not sure if that's possible in AC though? appart from switching to an H pattern gearbox).
