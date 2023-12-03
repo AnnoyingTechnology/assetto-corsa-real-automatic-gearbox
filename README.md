@@ -13,7 +13,7 @@ This app is a fork of someone else's work with many improvements.
   * `Combine with keyboard` [X] must be enabled
   * `Next gear` must be defined to `P`
   * `Previous gear` must be defined to `O`
-* In you first Drive, go to the righ of the screen, a long menu should appear on the right side, [X] `Realistic Auto` must be enabled
+* Start a practice drive, when ready to drive go to the right of the screen, a long menu should appear on the right side, [X] `Realistic Auto` must be enabled
 * The app should display on your screen, click on `Manual` so that it changes to `Auto`.
 * **Shift into 1st, you are ready to drive**
 
