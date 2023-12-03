@@ -34,10 +34,10 @@ See screenshots at the bottom of the page if needed.
  
 ## Screenshots
 
-![step 1](step_1.png)
+![step 1](step1.jpeg)
 
-![step 2](step_2.png)
+![step 2](step2.jpeg)
 
-![step 3](step_3.png)
+![step 3](step3.jpeg)
 
-![step 4](step_4.png)
+![step 4](step4.jpeg)
