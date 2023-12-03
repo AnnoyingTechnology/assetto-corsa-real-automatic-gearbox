@@ -17,6 +17,8 @@ This app is a fork of someone else's work with many improvements.
 * The app should display on your screen, click on `Manual` so that it changes to `Auto`.
 * **Shift into 1st, you are ready to drive**
 
+See screenshots at the bottom of the page if needed.
+
 
 ## Goals of the fork  
 * [x] Prevent double-downshifts by adding a requirement of 2.5sec between downshifts. This would give time for the engine to ramp up and offer a nicer experience. Ideally, we'd want to accept double downshifts but skip directly to the -2 or -3 gear to avoid the harshness of multiple throttle blips (not sure if that's possible in AC though? appart from switching to an H pattern gearbox).
@@ -30,3 +32,12 @@ This app is a fork of someone else's work with many improvements.
 * [ ] Splits the driving modes into distinct algorithms, rather than just altering a few variables (since there is lots of tweaking needed between the differents driving modes)
 
  
+## Screenshots
+
+![step 1](step_1.png)
+
+![step 2](step_2.png)
+
+![step 3](step_3.png)
+
+![step 4](step_4.png)
