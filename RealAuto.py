@@ -102,7 +102,7 @@ modes = ["Manual", "Auto: Normal", "Auto: Sport", "Auto: Eco"]
 def toggleDriveMode(*args):
     global mode_button, drive_mode
     drive_mode += 1
-    drive_mode = drive_mode%4
+    drive_mode = drive_mode%2
     ac.setText(mode_button, modes[drive_mode])
 
 
